@@ -93,3 +93,27 @@ void main( void )
         lcd_print(1,0, rx_buf+rx_indice );
     }
 }
+
+
+
+// AT+CIPSTART="TCP","52.87.105.151",80
+
+// AT+CIPSEND=74
+
+// GET / HTTP/1.1
+// Host: httpbin.org
+// Accept: */*
+// Connection: keep-alive
+
+
+
+
+
+// AT+CIPSTART="TCP","23.22.144.165",443
+
+// AT+CIPSEND=96
+
+// GET /api/users HTTP/1.1
+// Host: integrado.herokuapp.com
+// Accept: */*
+// Connection: keep-alive
