@@ -9,6 +9,7 @@ void eusart_init( unsigned long baud_rate );
 
 
 void eusart_read( unsigned char * rx_ptr, unsigned char rx_limit );
+// void eusart_read( unsigned char * rx_ptr, unsigned char rx_limit, const unsigned char * padrao_ini, const unsigned char * padrao_fim );
 void eusart_reading( unsigned char rx );
 void eusart_put( unsigned char c );
 void eusart_printing( void );

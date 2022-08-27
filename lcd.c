@@ -186,7 +186,10 @@ void lcd_print( unsigned char lin, unsigned char col, const char * str )
 
     while( *str )
     {
-        lcd_dataReg( *str );
+        if( *str >= ' ' )
+        {
+            lcd_dataReg( *str );
+        }
         ++str;
         ++pos;
     }

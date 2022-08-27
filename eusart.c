@@ -28,19 +28,25 @@
 
 unsigned char * eusart_rx_ptr0;
 unsigned char * eusart_rx_ptr1;
+unsigned char * eusart_rx_ptr;
+
 
 void eusart_read( unsigned char * rx_ptr, unsigned char rx_limit )
 {
     eusart_rx_ptr0 = rx_ptr;
     eusart_rx_ptr1 = (eusart_rx_ptr0 + rx_limit);
+    eusart_rx_ptr = rx_ptr;
 }
 
 void eusart_reading( unsigned char rx )
 {
-    if( eusart_rx_ptr0 < eusart_rx_ptr1 )
+    if( (rx >= ' ') && (rx <= 127) )
     {
-        *eusart_rx_ptr0 = rx;
-        ++eusart_rx_ptr0;
+        if( eusart_rx_ptr0 < eusart_rx_ptr1 )
+        {
+            *eusart_rx_ptr0 = rx;
+            ++eusart_rx_ptr0;
+        }
     }
 }
 
@@ -57,18 +63,18 @@ void eusart_put( unsigned char c )
         ;
 }
 
-const char * eusart_ptr_tx;
+const char * eusart_tx_ptr;
 void eusart_printing( void )
 {
-    TXREG = *eusart_ptr_tx;
-    ++eusart_ptr_tx;
-    PIE1bits.TXIE = ((*eusart_ptr_tx) != 0);
+    TXREG = *eusart_tx_ptr;
+    ++eusart_tx_ptr;
+    PIE1bits.TXIE = ((*eusart_tx_ptr) != 0);
 }
 void eusart_print( const char * str )
 {
     if( *str )
     {
-        eusart_ptr_tx = str;
+        eusart_tx_ptr = str;
         eusart_printing();
     }
 }
@@ -99,3 +105,113 @@ void eusart_init( unsigned long baud_rate )
     INTCONbits.PEIE = 1;   
     INTCONbits.GIE = 1;
 }
+
+
+
+
+
+
+
+
+
+// void eusart_reading( unsigned char rx )
+// {
+
+//     // if( (rx >= ' ') && (rx <= 127) )
+//     {
+//         // if( eusart_rx_ptr0 < eusart_rx_ptr1 )
+//         // {
+//         //     *eusart_rx_ptr0 = rx;
+//         //     ++eusart_rx_ptr0;
+//         // }
+
+//         switch( padrao_estado )
+//         {
+//             case 0:
+//                     if( rx == *(padrao_inicial+padrao_indice) )
+//                     {
+//                         padrao_indice++;
+//                     }
+//                     else
+//                     {
+//                         padrao_indice = 0;
+//                         if( rx == *(padrao_inicial+padrao_indice) )
+//                             padrao_indice++;
+//                     }
+//                     if( *(padrao_inicial+padrao_indice) == '\0' )
+//                     {
+//                         padrao_estado = 1;
+//                         padrao_indice = 0;
+//                         eusart_rx_ptr = eusart_rx_ptr0;
+//                     }
+//                     break;
+
+//             case 1: 
+//                     if( (rx >= ' ') && (rx <= 127) )
+//                     {
+//                         if( eusart_rx_ptr < eusart_rx_ptr1 )
+//                         {
+//                             *eusart_rx_ptr = rx;
+//                             ++eusart_rx_ptr;
+//                         }
+//                     }
+
+//                     if( rx == *(padrao_final+padrao_indice) )
+//                     {
+//                         padrao_indice++;
+//                     }
+//                     else
+//                     {
+//                         padrao_indice = 0;
+//                         if( rx == *(padrao_final+padrao_indice) )
+//                             padrao_indice++;
+//                     }
+//                     if( *(padrao_final+padrao_indice) == '\0' )
+//                     {
+//                         padrao_estado = 2;
+//                         padrao_indice = 0;
+//                     }
+//                     break;
+//             case 2:
+//                     while( eusart_rx_ptr < eusart_rx_ptr1 )
+//                     {
+//                         *eusart_rx_ptr = ' ';
+//                         ++eusart_rx_ptr;
+//                     }
+//                     padrao_estado = 3;
+//                     break;
+
+//             default:
+//                     break;
+//         }
+
+//         // *eusart_rx_ptr = rx;
+//         // ++eusart_rx_ptr;
+//         // if( eusart_rx_ptr >= eusart_rx_ptr1 )
+//         //     eusart_rx_ptr = eusart_rx_ptr0;
+//     }
+// }
+
+
+// void eusart_read( unsigned char * rx_ptr, unsigned char rx_limit, const unsigned char * padrao_ini, const unsigned char * padrao_fim )
+// {
+//     eusart_rx_ptr0 = rx_ptr;
+//     eusart_rx_ptr1 = (eusart_rx_ptr0 + rx_limit);
+//     eusart_rx_ptr = rx_ptr;
+
+//     padrao_inicial = padrao_ini;
+//     padrao_final = padrao_fim;
+//     padrao_indice = 0;
+//     padrao_estado = 0;
+
+  
+// }
+// unsigned char * eusart_rx_ptr0;
+// unsigned char * eusart_rx_ptr1;
+// unsigned char * eusart_rx_ptr;
+
+// const unsigned char * padrao_inicial;
+// const unsigned char * padrao_final;
+// unsigned char padrao_indice = 0;
+// unsigned char padrao_estado = 0;
+
