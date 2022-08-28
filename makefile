@@ -1,7 +1,10 @@
 PROJECT=cpu_bt_wifi
-CC=/opt/microchip/xc8/v2.32/bin/xc8-cc
+CC_VERSION=v2.40
+CC=/opt/microchip/xc8/$(CC_VERSION)/bin/xc8-cc
 DEVICE=16F887
-DFP="/opt/microchip/mplabx/v5.45/packs/Microchip/PIC16Fxxx_DFP/1.2.33/xc8"
+DFP_VERSION=v6.00
+CHIP_VERSION=PIC16Fxxx_DFP/1.3.42/xc8
+DFP="/opt/microchip/mplabx/$(DFP_VERSION)/packs/Microchip/$(CHIP_VERSION)"
 BUILD=dist/default/production
 
 SRCS := $(wildcard *.c)
