@@ -118,3 +118,10 @@ void main( void )
 // Host: integrado.herokuapp.com
 // Accept: */*
 // Connection: keep-alive
+
+
+
+
+// AT+CIPSTART="TCP","api.thingspeak.com",80
+// AT+CIPSEND=74
+// GET https://api.thingspeak.com/update?api_key=6WFOK02JI7PJRJRA&field2=50
