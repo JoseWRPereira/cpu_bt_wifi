@@ -5,80 +5,102 @@
 #include "eusart.h"
 #include "error.h"
 #include "keyboard.h"
+#include "atcmd.h"
+#include "fsm.h"
 
-unsigned char estado = 0;
-const unsigned char * tx_ptr;
+// unsigned char estado = 5;
+// const unsigned char * tx_ptr;
+// unsigned char rx_buf[50];
+
+// struct atcmd_t at = {"AT", "OK", ATCMD_START };
+
+
 
 void main( void )
 {
-    lcd_init();
-    eusart_init(115200);
-    keyboard_init();
+    struct fsmT atcmd = {atcmd_init, 115200};
 
     while( 1 )
     {
-        switch( estado )
-        {
-            case 0: 
-                    tx_ptr = "ATE0\r\n";
-                    eusart_print(tx_ptr);
-                    estado = 1;
-                    break;
-            case 1: 
-                    delay(1000);
-                    estado = 2;
-                    break;
-            case 2: 
-                    tx_ptr = "AT+CWMODE=1\r\n";
-                    eusart_print(tx_ptr);
-                    estado = 3;
-                    break;
-            case 3: 
-                    delay(1000);
-                    estado = 4;
-                    break;
-            case 4: 
-                    tx_ptr = "AT+CWJAP=\"arduino\",\"12345678\"\r\n";
-                    eusart_print(tx_ptr);
-                    estado = 5;
-                    break;
-            case 5: 
-                    delay(1000);
-                    estado = 6;
-                    break;
-            case 6: 
-                    tx_ptr = "AT+CIPSTART=\"TCP\",\"api.thingspeak.com\",80\r\n";
-                    eusart_print(tx_ptr);
-                    estado = 7;
-                    break;
-            case 7: 
-                    delay(1000);
-                    estado = 8;
-                    break;
-            case 8: 
-                    tx_ptr = "AT+CIPSEND=84\r\n";
-                    eusart_print(tx_ptr);
-                    estado = 9;
-                    break;
-            case 9: 
-                    delay(1000);
-                    estado = 10;
-                    break;
-            case 10: 
-                    tx_ptr = "GET https://api.thingspeak.com/update?api_key=6WFOK02JI7PJRJRA&field1=35&field2=40\r\n";
-                    eusart_print(tx_ptr);
-                    estado = 11;
-                    break;
-            case 11: 
-                    delay(60000);
-                    estado = 6;
-                    break;
-        }
-        lcd_print(0,0, tx_ptr );
-        lcd_num(1,0, (int)estado, 2 );
-
+        atcmd.func = atcmd.func( &atcmd );
     }
 }
+
+
+// void main( void )
+// {
+//     lcd_init();
+//     eusart_init(115200);
+//     keyboard_init();
+
+//     while( 1 )
+//     {
+//         switch( estado )
+//         {
+//             case 0: 
+//                     tx_ptr = "ATE0\r\n";
+//                     eusart_print(tx_ptr);
+//                     estado = 1;
+//                     break;
+//             case 1: 
+//                     delay(1000);
+//                     estado = 2;
+//                     break;
+//             case 2: 
+//                     tx_ptr = "AT+CWMODE=1\r\n";
+//                     eusart_print(tx_ptr);
+//                     estado = 3;
+//                     break;
+//             case 3: 
+//                     delay(1000);
+//                     estado = 4;
+//                     break;
+//             case 4: 
+//                     tx_ptr = "AT+CWJAP=\"arduino\",\"12345678\"\r\n";
+//                     eusart_print(tx_ptr);
+//                     estado = 5;
+//                     break;
+//             case 5: 
+//                     delay(15000);
+//                     estado = 6;
+//                     break;
+//             case 6: 
+//                     tx_ptr = "AT+CIPSTART=\"TCP\",\"api.thingspeak.com\",80\r\n";
+//                     eusart_print(tx_ptr);
+//                     estado = 7;
+//                     break;
+//             case 7: 
+//                     delay(10000);
+//                     estado = 8;
+//                     break;
+//             case 8: 
+//                     tx_ptr = "AT+CIPSEND=83\r\n";
+//                     eusart_print(tx_ptr);
+//                     estado = 9;
+//                     break;
+//             case 9: 
+//                     delay(1000);
+//                     estado = 10;
+//                     break;
+//             case 10: 
+//                     tx_ptr = "GET http://api.thingspeak.com/update?api_key=6WFOK02JI7PJRJRA&field1=35&field2=40\r\n";
+//                     eusart_print(tx_ptr);
+//                     estado = 11;
+//                     break;
+//             case 11: 
+//                     delay(10000);
+//                     estado = 6;
+//                     break;
+//         }
+//         lcd_print(0,2, tx_ptr );
+//         lcd_num(0,0, (int)estado, 2 );
+
+//         lcd_print(1,0, rx_buf );
+//         eusart_read( rx_buf, 49 );
+
+
+//     }
+// }
 
 
 // #define RX_BUF_SIZE                     65
