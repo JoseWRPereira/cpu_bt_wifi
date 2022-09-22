@@ -1,28 +1,22 @@
 #include "config.h"
 #include <xc.h>
-#include "delay.h"
-#include "lcd.h"
-#include "eusart.h"
-#include "error.h"
-#include "keyboard.h"
+#include "tmr_tick.h"
+#include "ihm.h"
 #include "atcmd.h"
-#include "fsm.h"
 
-// unsigned char estado = 5;
-// const unsigned char * tx_ptr;
-// unsigned char rx_buf[50];
-
-// struct atcmd_t at = {"AT", "OK", ATCMD_START };
-
-
+IHM ihm;
+ATCMD atcmd;
 
 void main( void )
 {
-    struct fsmT atcmd = {atcmd_init, 115200};
+    tmr_tick_init();
+    fsm_ihm_init( &ihm );
+    fsm_atcmd_init( &atcmd );
 
     while( 1 )
     {
-        atcmd.func = atcmd.func( &atcmd );
+        fsm_ihm( &ihm );
+        fsm_atcmd( &atcmd );
     }
 }
 

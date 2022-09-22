@@ -36,14 +36,14 @@ unsigned char eusart_size_of_rx( void )
     return( (eusart.rx_head-eusart.rx_tail)%EUSART_RX_SIZE );
 }
 
-unsigned char eusart_cmp( const char * ptr )
+unsigned char eusart_cmp( const char * ptr, unsigned char size )
 {
-    unsigned char tam;
+    // unsigned char tam;
     unsigned char i;
     unsigned char cmp = 1;
 
-    tam = size_of_str( ptr );
-    for( i=0; i<tam; i++ )
+    // tam = size_of_str( ptr );
+    for( i=0; i<size; i++ )
     {
         if( eusart.rx[(eusart.rx_tail+i)%EUSART_RX_SIZE] != ptr[i] )
         {

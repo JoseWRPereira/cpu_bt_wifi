@@ -2,6 +2,7 @@
 #include <xc.h>
 #include "eusart.h"
 #include "error.h"
+#include "tmr_tick.h"
 
 void __interrupt() isr(void)
 {
@@ -23,5 +24,11 @@ void __interrupt() isr(void)
     if( PIR1bits.TXIF && PIE1bits.TXIE )
     {
         eusart_printing();
+    }
+
+    if( PIR1bits.TMR1IF )
+    {
+        PIR1bits.TMR1IF = 0;
+        tmr_tick_int();
     }
 }

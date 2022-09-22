@@ -19,7 +19,7 @@ void eusart_init( unsigned long baud_rate );
 
 unsigned char size_of_str( const char * ptr );
 unsigned char eusart_size_of_rx( void );
-unsigned char eusart_cmp( const char * ptr );
+unsigned char eusart_cmp( const char * ptr, unsigned char size );
 unsigned char eusart_rx_pop( void );
 void eusart_reading( unsigned char rx );
 void eusart_put( unsigned char c );
