@@ -8,7 +8,7 @@ struct eusart_t
     unsigned char rx[EUSART_RX_SIZE];
     unsigned char rx_head, rx_tail;
     const char * tx_ptr;
-    unsigned char status;
+    // unsigned char status;
 };
 
 ///////////////////////////////////////// Restrições

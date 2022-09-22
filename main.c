@@ -3,6 +3,7 @@
 #include "tmr_tick.h"
 #include "ihm.h"
 #include "atcmd.h"
+#include "lcd.h"
 
 IHM ihm;
 ATCMD atcmd;
@@ -17,6 +18,8 @@ void main( void )
     {
         fsm_ihm( &ihm );
         fsm_atcmd( &atcmd );
+        lcd_num(0, 9, ihm.estado, 3 );
+        lcd_num(0,13, atcmd.estado, 3 );
     }
 }
 
@@ -216,8 +219,8 @@ void main( void )
 // AT+CWMODE=1
 // AT+CWLAP
 // AT+CWJAP="arduino","12345678"
+// AT+CWJAP="IoT_AP","12345678"
 // AT+CIPSTART="TCP","api.thingspeak.com",80
 // AT+CIPSEND=84
-// GET https://api.thingspeak.com/update?api_key=6WFOK02JI7PJRJRA&field1=35&field2=40
-
+// GET https://api.thingspeak.com/update?api_key=6WFOK02JI7PJRJRA&field1=25&field2=45
 

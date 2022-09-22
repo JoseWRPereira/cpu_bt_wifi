@@ -1,7 +1,8 @@
 #ifndef ATCMD_H
 #define ATCMD_H
 
-#define ATCMD_EOT   100
+#define ATCMD_MATCH     100
+#define ATCMD_NO_MATCH  200
 
 
 typedef struct atcmd_t

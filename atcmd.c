@@ -2,7 +2,6 @@
 #include "atcmd.h"
 #include "eusart.h"
 
-#include "lcd.h" // Teste
 
 void fsm_atcmd_init( ATCMD * ptr )
 {
@@ -26,7 +25,6 @@ void fsm_atcmd( ATCMD * ptr )
     {
         case 1:
                 eusart_print( ptr->send );
-                lcd_lincol(1,0);
                 ptr->estado = 10;
                 break;
         case 10:
@@ -34,26 +32,21 @@ void fsm_atcmd( ATCMD * ptr )
                 {
                     if( eusart_cmp( ptr->recv, ptr->recv_size ) )
                     {
-                        ptr->estado = 20;
+                        ptr->estado = ATCMD_MATCH;
                     }
                     else
                     {
-                        lcd_put( eusart_rx_pop() );
+                        char c = eusart_rx_pop();
+                        if( c == '\n' )
+                            ptr->estado = ATCMD_NO_MATCH;
                     }
                 }
                 break;
-        case 20:
-                lcd_lincol(1,15);
-                lcd_put('*');
-                ptr->estado = ATCMD_EOT;
-                lcd_lincol(1,0);
+        case ATCMD_MATCH:
+                eusart_rx_pop();
                 break;
-        case ATCMD_EOT:
-                {
-                    char c = eusart_rx_pop();
-                    if( c )
-                        lcd_put( c );
-                }
+        case ATCMD_NO_MATCH:
+                eusart_rx_pop();
                 break;
     }
 }

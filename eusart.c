@@ -40,11 +40,9 @@ unsigned char eusart_size_of_rx( void )
 
 unsigned char eusart_cmp( const char * ptr, unsigned char size )
 {
-    // unsigned char tam;
     unsigned char i;
     unsigned char cmp = 1;
 
-    // tam = size_of_str( ptr );
     for( i=0; i<size; i++ )
     {
         if( eusart.rx[(eusart.rx_tail+i)%EUSART_RX_SIZE] != ptr[i] )
@@ -104,17 +102,12 @@ void eusart_init( unsigned long baud_rate )
 
 void eusart_reading( unsigned char rx )
 {
-    if( (rx >= ' ') && (rx <= 127) && (!eusart.status) )
+    if( ((rx >= ' ') && (rx <= 127)) )//|| (rx=='\r') || (rx=='\n') )
     {
         eusart.rx[eusart.rx_head] = rx;
         ++eusart.rx_head;
         eusart.rx_head %= EUSART_RX_SIZE;
-        if( eusart.rx_head == eusart.rx_tail )
-        {
-            eusart.status |= 0x02;
-        }
     }
-    eusart.status |= (rx == '\n');
 }
 
 
@@ -145,77 +138,3 @@ void eusart_print( const char * str )
         eusart_printing();
     }
 }
-
-
-
-
-
-
-
-/////////////////////////////////////////
-///////////////////////////////////////// Recepção de dados
-/////////////////////////////////////////
-
-// unsigned char * eusart_rx_ptr0;
-// unsigned char * eusart_rx_ptr1;
-// unsigned char * eusart_rx_ptr;
-
-
-// void eusart_read( unsigned char * rx_ptr, unsigned char rx_limit )
-// {
-//     eusart_rx_ptr0 = rx_ptr;
-//     eusart_rx_ptr1 = (eusart_rx_ptr0 + rx_limit);
-//     eusart_rx_ptr = rx_ptr;
-// }
-
-// void eusart_reading( unsigned char rx )
-// {
-//     if( (rx >= ' ') && (rx <= 127) )
-//     {
-//         if( eusart_rx_ptr0 < eusart_rx_ptr1 )
-//         {
-//             *eusart_rx_ptr0 = rx;
-//             ++eusart_rx_ptr0;
-//         }
-//     }
-// }
-
-
-
-/////////////////////////////////////////
-///////////////////////////////////////// Transmissão de dados
-/////////////////////////////////////////
-
-// void eusart_put( unsigned char c )
-// {
-//     TXREG = c;
-//     while( !TXSTAbits.TRMT )
-//         ;
-// }
-
-// const char * eusart_tx_ptr;
-// void eusart_printing( void )
-// {
-//     TXREG = *eusart_tx_ptr;
-//     ++eusart_tx_ptr;
-//     PIE1bits.TXIE = ((*eusart_tx_ptr) != 0);
-// }
-// void eusart_print( const char * str )
-// {
-//     if( *str )
-//     {
-//         eusart_tx_ptr = str;
-//         eusart_printing();
-//     }
-// }
-
-
-    // if( (rx >= ' ') && (rx <= 127) )
-    // {
-    //     if( eusart.rx_ptr < eusart.rx_ptr_end )
-    //     {
-    //         *eusart.rx_ptr = rx;
-    //         ++eusart.rx_ptr;
-    //     }
-    // }
-    // eusart.status |= (eusart.terminal == rx);
