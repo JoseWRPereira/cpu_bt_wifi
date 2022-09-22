@@ -32,7 +32,7 @@ erase:
 	pk2cmd -P -E
 
 flash: ./$(BUILD)/$(PROJECT).hex
-	pk2cmd -P PIC$(DEVICE) -F ./$(BUILD)/$(PROJECT).hex -M -T
+	pk2cmd -P PIC$(DEVICE) -F ./$(BUILD)/$(PROJECT).hex -M
 
 off: 
 	pk2cmd -P -W

@@ -38,6 +38,8 @@ void fsm_ihm( IHM * ptr )
                 if( !tmr_tick(IHM_TMR) )
                     ptr->estado = 10;
                 break;
+
+
         case 10:
                 lcd_print(0,0,"Comandos AT     ");
                 lcd_print(1,0,"                ");
@@ -49,21 +51,23 @@ void fsm_ihm( IHM * ptr )
                     ptr->estado = 12;
                 break;
         case 12:
-                fsm_atcmd_com( &atcmd, "AT\r\n", "OK" );
-                tmr_tick_set(IHM_TMR,3000);
+                fsm_atcmd_com( &atcmd, "AT\r\n", "*JW*" );
+                lcd_num(0,13, atcmd.recv_size, 3 );
+                tmr_tick_set(IHM_TMR,30000);
                 ptr->estado = 13;
                 break;
         case 13:
-                if( atcmd.estado == ATCMD_EOT )
-                {
-                    lcd_print(1,0,"OK");
-                    ptr->estado = 13;
-                }
-                if( !tmr_tick(IHM_TMR) )
-                    ptr->estado = IHM_ERROR_TIMEOUT;
+                // if( atcmd.estado == ATCMD_EOT )
+                // {
+                //     lcd_print(1,0,"OK");
+                //     ptr->estado = 13;
+                // }
+                // if( !tmr_tick(IHM_TMR) )
+                //     ptr->estado = IHM_ERROR_TIMEOUT;
                 break;
         case IHM_ERROR_TIMEOUT:
                 lcd_print(1,0," Timeout ATCMD  ");
+                ptr->estado = 11;
                 break;
         default:
                 ptr->estado = IHM_ERROR;

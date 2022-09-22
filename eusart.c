@@ -26,8 +26,10 @@ struct eusart_t eusart;
 unsigned char size_of_str( const char * ptr )
 {
     unsigned char i = 0;
-    while( *(ptr+i++) )
-        ;
+    while( *(ptr+i) )
+    {
+        ++i;
+    }
     return( i );
 }
 
@@ -47,8 +49,11 @@ unsigned char eusart_cmp( const char * ptr, unsigned char size )
     {
         if( eusart.rx[(eusart.rx_tail+i)%EUSART_RX_SIZE] != ptr[i] )
         {
-            cmp = 0;
-            break;
+            if( ptr[i] != '*')
+            {
+                cmp = 0;
+                break;
+            }
         }
     }
     return( cmp );
