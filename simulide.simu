@@ -1,4 +1,4 @@
-<circuit Speed_sps="1000000" reactStep="50" animate="0" type="simulide_0.4" Speed_per="100" Simu_Step_nS="1000" noLinAcc="5">
+<circuit Speed_sps="1000000" reactStep="50" animate="1" type="simulide_0.4" Speed_per="100" Simu_Step_nS="1000" noLinAcc="5">
 
 Unique  Id: Tunnel-87: 
 Circuit Id: Tunnel-20
@@ -30,7 +30,7 @@ Circuit Id: Tunnel-68
 
 Unique  Id: Resistor-72: 
 Circuit Id: Resistor-63
-<item objectName="Resistor-72" y="-256" labely="-20" labelx="-12" itemtype="Resistor" valLabRot="0" x="-16" valLabelx="-16" Show_res="true" id="Resistor-63" circRot="7.129905859713e-312" Show_id="false" mainComp="false" Resistance="100" labelrot="0" circPos="0,0" rotation="-90" boardPos="-1e+6,-1e+6" hflip="1" Unit=" Ω" boardRot="-1e+6" valLabely="6" vflip="1"/>
+<item objectName="Resistor-72" y="-256" labely="-20" labelx="-12" itemtype="Resistor" valLabRot="0" x="-16" valLabelx="-16" Show_res="true" id="Resistor-63" circRot="7.129905859713e-312" Show_id="false" mainComp="false" Resistance="10" labelrot="0" circPos="0,0" rotation="-90" boardPos="-1e+6,-1e+6" hflip="1" Unit=" kΩ" boardRot="-1e+6" valLabely="6" vflip="1"/>
 
 Unique  Id: Node-70: 
 Circuit Id: Node-70
@@ -46,7 +46,7 @@ Circuit Id: Ground-64
 
 Unique  Id: Resistor-63: 
 Circuit Id: Resistor-63
-<item objectName="Resistor-63" y="-256" labely="-20" labelx="-12" itemtype="Resistor" valLabRot="0" x="-68" valLabelx="-16" Show_res="true" id="Resistor-63" circRot="7.129905859713e-312" Show_id="false" mainComp="false" Resistance="100" labelrot="0" circPos="0,0" rotation="-90" boardPos="-1e+6,-1e+6" hflip="1" Unit=" Ω" boardRot="-1e+6" valLabely="6" vflip="1"/>
+<item objectName="Resistor-63" y="-256" labely="-20" labelx="-12" itemtype="Resistor" valLabRot="0" x="-68" valLabelx="-16" Show_res="true" id="Resistor-63" circRot="7.129905859713e-312" Show_id="false" mainComp="false" Resistance="10" labelrot="0" circPos="0,0" rotation="-90" boardPos="-1e+6,-1e+6" hflip="1" Unit=" kΩ" boardRot="-1e+6" valLabely="6" vflip="1"/>
 
 Unique  Id: Push-62: 
 Circuit Id: Push-62
