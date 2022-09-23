@@ -5,6 +5,15 @@
 #include "atcmd.h"
 #include "lcd.h"
 
+
+/////////////////// Teste
+#include "fifo.h" 
+#define RCV_SIZE 8
+unsigned char rcv_buf[RCV_SIZE] = "        ";
+FIFO rcv;
+///////////////////
+
+
 IHM ihm;
 ATCMD atcmd;
 
@@ -13,6 +22,28 @@ void main( void )
     tmr_tick_init();
     fsm_ihm_init( &ihm );
     fsm_atcmd_init( &atcmd );
+
+    fifo_init(&rcv, rcv_buf, RCV_SIZE);
+    tmr_tick_set(3, 5000);
+
+    while( 1 )
+    {
+        lcd_num(0,0, rcv.head,2);
+        lcd_num(0,3, rcv.tail,2);
+        lcd_num(0,6, rcv.size,2);
+        lcd_num(0,9, fifo_queue_is_free(&rcv),2);
+
+        lcd_lincol(1,0);
+        for( char i=0; i<RCV_SIZE; i++ )
+            lcd_put( rcv_buf[i] );
+
+        if( !tmr_tick(3) )
+        {
+            tmr_tick_set(3, 5000);
+            lcd_lincol(0,15);
+            lcd_put(fifo_dequeue(&rcv));
+        }
+    }
 
     while( 1 )
     {

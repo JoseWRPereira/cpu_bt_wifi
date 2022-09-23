@@ -20,6 +20,9 @@
 #include "eusart.h"
 #include "error.h"
 #include "delay.h"
+#include "fifo.h"
+
+extern FIFO rcv;
 
 struct eusart_t eusart;
 
@@ -104,6 +107,7 @@ void eusart_reading( unsigned char rx )
 {
     if( ((rx >= ' ') && (rx <= 127)) )//|| (rx=='\r') || (rx=='\n') )
     {
+        fifo_enqueue( &rcv, rx );
         eusart.rx[eusart.rx_head] = rx;
         ++eusart.rx_head;
         eusart.rx_head %= EUSART_RX_SIZE;

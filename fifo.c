@@ -36,4 +36,8 @@ unsigned char fifo_dequeue( FIFO * fifo )
     return( dado );
 }
 
+unsigned char fifo_queue_is_free( FIFO * fifo )
+{
+    return( fifo->size - ((fifo->tail-fifo->head)%fifo->size) );
+}
 
