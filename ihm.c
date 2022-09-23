@@ -5,6 +5,33 @@
 #include "ihm.h"
 #include "atcmd.h"
 
+// s: "AT\r\n"
+// r: "OK"
+
+
+// "AT+RST"
+// "OK"
+
+
+// "AT+GMR"
+// "<AT version info>
+// <SDK version info>
+// <compile time>
+// <Bin version>
+// 
+// OK"
+
+// "AT+GMR\r\n"
+// "AT version:1.2.0.0(Jul  1 2016 20:04:45)
+// SDK version:1.5.4.1(39cb9a32)
+// Ai-Thinker Technology Co. Ltd.
+// v1.5.4.1-a Nov 30 2017 15:54:29
+// OK"
+
+
+// "ATE0\r\n"
+// OK"
+
 typedef struct AT_CMDS_T
 {
     const char * enviar;
