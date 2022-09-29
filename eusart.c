@@ -17,65 +17,33 @@
 
 // #include "config.h"
 #include <xc.h>
+#include "fifo.h"
 #include "eusart.h"
 #include "error.h"
 #include "delay.h"
-#include "fifo.h"
 
-extern FIFO rcv;
 
-struct eusart_t eusart;
 
-unsigned char size_of_str( const char * ptr )
+/////////////////////////////////////////
+///////////////////////////////////////// FIFO Queue
+/////////////////////////////////////////
+
+#define EUSART_RCV_SIZE 16
+
+char eusart_rcv_buf[EUSART_RCV_SIZE] = {"................"};
+FIFO eusart_rcv = { eusart_rcv_buf, 0, 0, EUSART_RCV_SIZE, 0};
+
+
+FIFO * eusart_fifo( void )
 {
-    unsigned char i = 0;
-    while( *(ptr+i) )
-    {
-        ++i;
-    }
-    return( i );
+    return( &eusart_rcv );
 }
 
-unsigned char eusart_size_of_rx( void )
-{
-    return( (eusart.rx_head-eusart.rx_tail)%EUSART_RX_SIZE );
-}
 
-unsigned char eusart_cmp( const char * ptr, unsigned char size )
-{
-    unsigned char i;
-    unsigned char cmp = 1;
 
-    for( i=0; i<size; i++ )
-    {
-        if( eusart.rx[(eusart.rx_tail+i)%EUSART_RX_SIZE] != ptr[i] )
-        {
-            if( ptr[i] != '*')
-            {
-                cmp = 0;
-                break;
-            }
-        }
-    }
-    return( cmp );
-}
-
-unsigned char eusart_rx_pop( void )
-{
-    unsigned char aux = 0;
-    if( eusart.rx_tail != eusart.rx_head )
-    {
-        aux = eusart.rx[eusart.rx_tail];
-        ++eusart.rx_tail;
-        eusart.rx_tail %= EUSART_RX_SIZE;
-    }
-    return( aux );
-}
 /////////////////////////////////////////
 ///////////////////////////////////////// Inicialização
 /////////////////////////////////////////
-
-
 void eusart_init( unsigned long baud_rate )
 {                           //  baud_rate: 9600, 19200, 38400, 57600, 115200 @20MHz
     INTCONbits.GIE = 0;
@@ -97,30 +65,23 @@ void eusart_init( unsigned long baud_rate )
 
 
 
-
-
 /////////////////////////////////////////
 ///////////////////////////////////////// Recepção de dados
 /////////////////////////////////////////
-
 void eusart_reading( unsigned char rx )
 {
     if( ((rx >= ' ') && (rx <= 127)) )//|| (rx=='\r') || (rx=='\n') )
     {
-        fifo_enqueue( &rcv, rx );
-        eusart.rx[eusart.rx_head] = rx;
-        ++eusart.rx_head;
-        eusart.rx_head %= EUSART_RX_SIZE;
+        fifo_enqueue( &eusart_rcv, rx );
     }
 }
-
-
 
 
 
 /////////////////////////////////////////
 ///////////////////////////////////////// Transmissão de dados
 /////////////////////////////////////////
+const char * eusart_tx_ptr;
 
 void eusart_put( unsigned char c )
 {
@@ -130,15 +91,15 @@ void eusart_put( unsigned char c )
 }
 void eusart_printing( void )
 {
-    TXREG = *eusart.tx_ptr;
-    ++eusart.tx_ptr;
-    PIE1bits.TXIE = ((*eusart.tx_ptr) != 0);
+    TXREG = *eusart_tx_ptr;
+    ++eusart_tx_ptr;
+    PIE1bits.TXIE = ((*eusart_tx_ptr) != 0);
 }
 void eusart_print( const char * str )
 {
     if( *str )
     {
-        eusart.tx_ptr = str;
+        eusart_tx_ptr = str;
         eusart_printing();
     }
 }

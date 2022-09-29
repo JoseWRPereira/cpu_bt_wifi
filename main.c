@@ -4,54 +4,59 @@
 #include "ihm.h"
 #include "atcmd.h"
 #include "lcd.h"
+#include "eusart.h"
 
-
-/////////////////// Teste
-#include "fifo.h" 
-#define RCV_SIZE 8
-unsigned char rcv_buf[RCV_SIZE] = "        ";
-FIFO rcv;
-///////////////////
-
+// /////////////////// Teste
+// #include "fifo.h" 
+// #define RCV_SIZE 8
+// unsigned char rcv_buf[RCV_SIZE] = "        ";
+// FIFO rcv;
+// ///////////////////
 
 IHM ihm;
 ATCMD atcmd;
 
 void main( void )
 {
-    tmr_tick_init();
-    fsm_ihm_init( &ihm );
-    fsm_atcmd_init( &atcmd );
+    // fsm_atcmd_init( &atcmd );
+    // fifo_init(&rcv, rcv_buf, RCV_SIZE);
+    // fsm_ihm_init( &ihm );
 
-    fifo_init(&rcv, rcv_buf, RCV_SIZE);
+    lcd_init();
+    eusart_init( 115200 );
+
+    tmr_tick_init();
     tmr_tick_set(3, 5000);
+    // fifo_init( eusart_fifo(), eusart_fifo()->queue , eusart_fifo()->size )
 
     while( 1 )
     {
-        lcd_num(0,0, rcv.head,2);
-        lcd_num(0,3, rcv.tail,2);
-        lcd_num(0,6, rcv.size,2);
-        lcd_num(0,9, fifo_queue_is_free(&rcv),2);
+        lcd_num(0, 0, eusart_fifo()->head,2);
+        lcd_num(0, 2, eusart_fifo()->tail,2);
+        lcd_num(0, 5, eusart_fifo()->size,2);
+        lcd_num(0, 8, fifo_queue_data_available(eusart_fifo()),2);
+        lcd_num(0,11, fifo_queue_is_free(eusart_fifo()),2);
 
         lcd_lincol(1,0);
-        for( char i=0; i<RCV_SIZE; i++ )
-            lcd_put( rcv_buf[i] );
+        for( char i=0; i<eusart_fifo()->size; i++ )
+            lcd_put( eusart_fifo()->queue[i] );
 
         if( !tmr_tick(3) )
         {
-            tmr_tick_set(3, 5000);
+            tmr_tick_set(3, 3000);
             lcd_lincol(0,15);
-            lcd_put(fifo_dequeue(&rcv));
+            if( fifo_queue_data_available(eusart_fifo()) )
+                lcd_put(fifo_dequeue(eusart_fifo()));
         }
     }
 
-    while( 1 )
-    {
-        fsm_ihm( &ihm );
-        fsm_atcmd( &atcmd );
-        lcd_num(0, 9, ihm.estado, 3 );
-        lcd_num(0,13, atcmd.estado, 3 );
-    }
+    // while( 1 )
+    // {
+    //     fsm_ihm( &ihm );
+    //     fsm_atcmd( &atcmd );
+    //     lcd_num(0, 9, ihm.estado, 3 );
+    //     lcd_num(0,13, atcmd.estado, 3 );
+    // }
 }
 
 

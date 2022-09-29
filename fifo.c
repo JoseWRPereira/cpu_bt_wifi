@@ -2,42 +2,46 @@
 #include "fifo.h"
 
 
-void fifo_init( FIFO * fifo, char * q, unsigned char s )
-{
-    fifo->queue = q;
-    fifo->head = 0;
-    fifo->tail = 0;
-    fifo->size = s;
-}
+// void fifo_init( FIFO * fifo, char * queue, unsigned char size )
+// {
+//     fifo->queue = queue;
+//     fifo->head = 0;
+//     fifo->tail = 0;
+//     fifo->size = size;
+//     fifo->count = 0;
+// }
 
 void fifo_enqueue( FIFO * fifo, unsigned char dado )
 {
-    unsigned char h;
-    h = fifo->head;
-    fifo->queue[h] = dado;
-    ++h;
-    h %= fifo->size;
-    if( h != fifo->tail )
+    if( fifo->count < fifo->size )
     {
-        fifo->head = h;
+        fifo->queue[fifo->head] = dado;
+        ++fifo->head;
+        fifo->head %= fifo->size;
+        ++fifo->count;
     }
 }
 
 
 unsigned char fifo_dequeue( FIFO * fifo )
 {
-    unsigned char dado;
-    if( fifo->head != fifo->tail )
+    unsigned char dado = 0;
+    if( fifo->count )
     {
         dado = fifo->queue[fifo->tail];
         fifo->tail++;
         fifo->tail %= fifo->size;
+        --fifo->count;
     }
     return( dado );
 }
 
 unsigned char fifo_queue_is_free( FIFO * fifo )
 {
-    return( fifo->size - ((fifo->tail-fifo->head)%fifo->size) );
+    return( fifo->size-fifo->count );
 }
 
+unsigned char fifo_queue_data_available( FIFO * fifo )
+{
+    return( fifo->count );
+}
