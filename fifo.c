@@ -1,16 +1,6 @@
 #include <xc.h>
 #include "fifo.h"
 
-
-// void fifo_init( FIFO * fifo, char * queue, unsigned char size )
-// {
-//     fifo->queue = queue;
-//     fifo->head = 0;
-//     fifo->tail = 0;
-//     fifo->size = size;
-//     fifo->count = 0;
-// }
-
 void fifo_enqueue( FIFO * fifo, unsigned char dado )
 {
     if( fifo->count < fifo->size )

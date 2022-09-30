@@ -11,7 +11,6 @@ typedef struct fifoT
 } FIFO;
 
 
-// void fifo_init( FIFO * fifo, char * queue, unsigned char size );
 void fifo_enqueue( FIFO * fifo, unsigned char dado );
 unsigned char fifo_dequeue( FIFO * fifo );
 unsigned char fifo_queue_is_free( FIFO * fifo );

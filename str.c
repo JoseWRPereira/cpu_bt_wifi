@@ -1,4 +1,6 @@
 #include <xc.h>
+#include "fifo.h"
+
 
 
 unsigned char str_size( const char * ptr )
@@ -32,3 +34,17 @@ unsigned char str_cmp( char * str1, const char * str2, unsigned char size )
     return( ans );
 }
 
+const char * str_search( FIFO * fifo, const char * str )
+{
+    char size = str_size(str);
+    const char * ret = "";
+    if( fifo_queue_data_available(fifo) >= size )
+    {
+        if( str_cmp( &fifo->queue[fifo->tail], str, size ) )
+        {
+            ret = str;
+        }
+        fifo_dequeue(fifo);
+    }
+    return( ret );
+}

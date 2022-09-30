@@ -5,49 +5,49 @@
 #include "atcmd.h"
 #include "lcd.h"
 #include "eusart.h"
+#include "str.h"
 
-// /////////////////// Teste
-// #include "fifo.h" 
-// #define RCV_SIZE 8
-// unsigned char rcv_buf[RCV_SIZE] = "        ";
-// FIFO rcv;
-// ///////////////////
+
+char msg1_buf[8] = {0};
+char msg2_buf[8] = {0};
+char msg3_buf[8] = {0};
+FIFO msg1 = {msg1_buf, 0,0,8,0};
+FIFO msg2 = {msg2_buf, 0,0,8,0};
+FIFO msg3 = {msg3_buf, 0,0,8,0};
 
 IHM ihm;
 ATCMD atcmd;
 
 void main( void )
 {
-    // fsm_atcmd_init( &atcmd );
-    // fifo_init(&rcv, rcv_buf, RCV_SIZE);
-    // fsm_ihm_init( &ihm );
-
     lcd_init();
     eusart_init( 115200 );
 
     tmr_tick_init();
-    tmr_tick_set(3, 5000);
-    // fifo_init( eusart_fifo(), eusart_fifo()->queue , eusart_fifo()->size )
+    tmr_tick_set(3, 1000);
 
     while( 1 )
     {
-        lcd_num(0, 0, eusart_fifo()->head,2);
-        lcd_num(0, 2, eusart_fifo()->tail,2);
-        lcd_num(0, 5, eusart_fifo()->size,2);
-        lcd_num(0, 8, fifo_queue_data_available(eusart_fifo()),2);
-        lcd_num(0,11, fifo_queue_is_free(eusart_fifo()),2);
-
-        lcd_lincol(1,0);
+        lcd_lincol(0,0);
         for( char i=0; i<eusart_fifo()->size; i++ )
             lcd_put( eusart_fifo()->queue[i] );
 
         if( !tmr_tick(3) )
         {
-            tmr_tick_set(3, 3000);
+            tmr_tick_set(3, 1000);
             lcd_lincol(0,15);
             if( fifo_queue_data_available(eusart_fifo()) )
-                lcd_put(fifo_dequeue(eusart_fifo()));
+            {
+                char aux = fifo_dequeue(eusart_fifo());
+                fifo_enqueue(&msg1,aux);
+                fifo_enqueue(&msg2,aux);
+                fifo_enqueue(&msg3,aux);
+            }
         }
+
+        lcd_print(1,0, str_search( &msg1, "OK" ));
+        lcd_print(1,3, str_search( &msg2, "SENAI" ));
+        lcd_print(1,9, str_search( &msg3, "Jandira" ));
     }
 
     // while( 1 )
