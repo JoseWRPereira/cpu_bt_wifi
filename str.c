@@ -17,22 +17,22 @@ unsigned char str_cmp( FIFO * fifo, const char * str2, unsigned char size )
 {
     unsigned char i = 0;
     unsigned char ans = 1;
+    unsigned char c;
 
     while( size )
     {
-        if( fifo->queue[((fifo->tail)+i) % fifo->size] != *(str2+i) )
+        c = *(str2+i);
+        if((c!='*')&&( fifo->queue[((fifo->tail)+i) % fifo->size] != c ))
         {
             ans = 0;
-            size = 0;
+            size = 1;
         }
-        else
-        {
-            --size;
-        }
+        --size;
         ++i;
     }
     return( ans );
 }
+
 
 const char * str_search( FIFO * fifo, const char * str )
 {
@@ -49,7 +49,7 @@ const char * str_search( FIFO * fifo, const char * str )
     return( ret );
 }
 
-// char str_between_indice = 0;
+
 char str_between( FIFO * fifo, const char * str1, const char * str2, char * destino )
 {
     char size;

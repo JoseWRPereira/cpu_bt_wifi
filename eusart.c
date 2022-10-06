@@ -30,8 +30,8 @@
 
 #define EUSART_RCV_SIZE 16
 
-char eusart_rcv_buf[EUSART_RCV_SIZE] = {"................"};
-FIFO eusart_rcv = { eusart_rcv_buf, 0, 0, EUSART_RCV_SIZE, 0};
+char eusart_rcv_buf[EUSART_RCV_SIZE] = {0};
+FIFO eusart_rcv = { eusart_rcv_buf, 0, 0, EUSART_RCV_SIZE, 0, 0};
 
 
 FIFO * eusart_fifo( void )
