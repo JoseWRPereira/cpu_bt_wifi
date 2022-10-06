@@ -32,9 +32,9 @@ void main( void )
         for( char i=0; i<eusart_fifo()->size; i++ )
             lcd_put( eusart_fifo()->queue[i] );
 
-        if( !tmr_tick(3) )
+        // if( !tmr_tick(3) )
         {
-            tmr_tick_set(3, 1000);
+            // tmr_tick_set(3, 1000);
             lcd_lincol(0,15);
             if( fifo_queue_data_available(eusart_fifo()) )
             {
