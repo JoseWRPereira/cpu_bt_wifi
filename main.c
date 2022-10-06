@@ -6,10 +6,6 @@
 #include "str.h"
 #include "fsm.h"
 
-char msg4_buf[8] = {0};
-char msg4_string[16];
-FIFO msg4 = {msg4_buf, 0,0,8,0,0};
-
 
 FSM atcfg = { atconfig_init };
 
@@ -26,11 +22,11 @@ void main( void )
         if( fifo_queue_data_available(eusart_fifo()) )
         {
             char aux = fifo_dequeue(eusart_fifo());
-            // fifo_enqueue(&msg4,aux);
+            fifo_enqueue( atcfg_fifo(), aux);
         }
 
-        str_between( &msg4, "SENAI", "**:**", msg4_string);
-        lcd_print(1,0, msg4_string);
+        // str_between( &msg4, "SENAI", "**:**", msg4_string);
+        // lcd_print(1,0, msg4_string);
 
 
         atcfg.func( &atcfg );
