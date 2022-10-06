@@ -8,6 +8,7 @@ typedef struct fifoT
     unsigned char tail;
     unsigned char size;
     unsigned char count;
+    unsigned char between;
 } FIFO;
 
 

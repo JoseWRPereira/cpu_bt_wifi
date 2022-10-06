@@ -11,10 +11,12 @@
 char msg1_buf[8] = {0};
 char msg2_buf[8] = {0};
 char msg3_buf[8] = {0};
+char msg4_buf[8] = {0};
+char msg4_string[16];
 FIFO msg1 = {msg1_buf, 0,0,8,0};
 FIFO msg2 = {msg2_buf, 0,0,8,0};
 FIFO msg3 = {msg3_buf, 0,0,8,0};
-
+FIFO msg4 = {msg4_buf, 0,0,8,0,0};
 IHM ihm;
 ATCMD atcmd;
 
@@ -39,15 +41,19 @@ void main( void )
             if( fifo_queue_data_available(eusart_fifo()) )
             {
                 char aux = fifo_dequeue(eusart_fifo());
-                fifo_enqueue(&msg1,aux);
-                fifo_enqueue(&msg2,aux);
-                fifo_enqueue(&msg3,aux);
+                // fifo_enqueue(&msg1,aux);
+                // fifo_enqueue(&msg2,aux);
+                // fifo_enqueue(&msg3,aux);
+                fifo_enqueue(&msg4,aux);
             }
         }
 
-        lcd_print(1,0, str_search( &msg1, "OK" ));
-        lcd_print(1,3, str_search( &msg2, "SENAI" ));
-        lcd_print(1,9, str_search( &msg3, "Jandira" ));
+        lcd_num(1,0, str_between( &msg4, "SENAI", "OK", msg4_string),1 );
+        lcd_print(1,3, msg4_string);
+
+        // lcd_print(1,0, str_search( &msg1, "OK" ));
+        // lcd_print(1,3, str_search( &msg2, "SENAI" ));
+        // lcd_print(1,9, str_search( &msg3, "Jandira" ));
     }
 
     // while( 1 )
